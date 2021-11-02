@@ -73,6 +73,10 @@ type SecretStoreProvider struct {
 	// Alibaba configures this store to sync secrets using Alibaba Cloud provider
 	// +optional
 	Alibaba *AlibabaProvider `json:"alibaba,omitempty"`
+
+	// OnePassword configures this store to sync secrets using the 1Password Cloud provider
+	// +optional
+	OnePassword *OnePasswordProvider `json:"onepassword,omitempty"`
 }
 
 type SecretStoreConditionType string

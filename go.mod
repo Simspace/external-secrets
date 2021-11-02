@@ -34,6 +34,7 @@ replace (
 
 require (
 	cloud.google.com/go v0.81.0
+	github.com/1Password/connect-sdk-go v1.2.0 // indirect
 	github.com/Azure/azure-sdk-for-go v54.1.0+incompatible
 	github.com/Azure/go-autorest/autorest/azure/auth v0.5.7
 	github.com/Azure/go-autorest/autorest/to v0.4.0 // indirect
