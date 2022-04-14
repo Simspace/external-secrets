@@ -20,9 +20,7 @@ import (
 
 	"github.com/1Password/connect-sdk-go/connect"
 	"github.com/1Password/connect-sdk-go/onepassword"
-	esv1alpha1 "github.com/external-secrets/external-secrets/apis/externalsecrets/v1alpha1"
-	"github.com/external-secrets/external-secrets/pkg/provider"
-	"github.com/external-secrets/external-secrets/pkg/provider/schema"
+	esv1beta1 "github.com/external-secrets/external-secrets/apis/externalsecrets/v1beta1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 	kclient "sigs.k8s.io/controller-runtime/pkg/client"
@@ -51,13 +49,13 @@ type ProviderOnePassword struct {
 	client connect.Client
 }
 
+// https://github.com/external-secrets/external-secrets/issues/644
+var _ esv1beta1.SecretsClient = &ProviderOnePassword{}
+var _ esv1beta1.Provider = &ProviderOnePassword{}
+
 // NewClient constructs a 1Password Provider.
-func (provider *ProviderOnePassword) NewClient(ctx context.Context, store esv1alpha1.GenericStore, kube kclient.Client, namespace string) (provider.SecretsClient, error) {
-	storeSpec := store.GetSpec()
-	if storeSpec == nil || storeSpec.Provider == nil || storeSpec.Provider.OnePassword == nil {
-		return nil, fmt.Errorf(errOnePasswordStore)
-	}
-	config := storeSpec.Provider.OnePassword
+func (provider *ProviderOnePassword) NewClient(ctx context.Context, store esv1beta1.GenericStore, kube kclient.Client, namespace string) (esv1beta1.SecretsClient, error) {
+	config := store.GetSpec().Provider.OnePassword
 
 	credentialsSecret := &corev1.Secret{}
 	objectKey := types.NamespacedName{
@@ -66,15 +64,11 @@ func (provider *ProviderOnePassword) NewClient(ctx context.Context, store esv1al
 	}
 
 	// only ClusterSecretStore is allowed to set namespace (and then it's required)
-	if store.GetObjectKind().GroupVersionKind().Kind == esv1alpha1.ClusterSecretStoreKind {
+	if store.GetObjectKind().GroupVersionKind().Kind == esv1beta1.ClusterSecretStoreKind {
 		if config.Auth.SecretRef.ConnectToken.Namespace == nil {
 			return nil, fmt.Errorf(errClusterSecretStoreNamespaceMissing)
 		}
 		objectKey.Namespace = *config.Auth.SecretRef.ConnectToken.Namespace
-	} else {
-		if config.Auth.SecretRef.ConnectToken.Namespace != nil {
-			return nil, fmt.Errorf(errSecretStoreNamespaceSet)
-		}
 	}
 
 	err := kube.Get(ctx, objectKey, credentialsSecret)
@@ -91,8 +85,30 @@ func (provider *ProviderOnePassword) NewClient(ctx context.Context, store esv1al
 	return provider, nil
 }
 
+// ValidateStore checks if the provided store is valid
+func (provider *ProviderOnePassword) ValidateStore(store esv1beta1.GenericStore) error {
+	storeSpec := store.GetSpec()
+	if storeSpec == nil || storeSpec.Provider == nil || storeSpec.Provider.OnePassword == nil {
+		return fmt.Errorf(errOnePasswordStore)
+	}
+	config := storeSpec.Provider.OnePassword
+
+	// only ClusterSecretStore is allowed to set namespace (and then it's required)
+	if store.GetObjectKind().GroupVersionKind().Kind == esv1beta1.ClusterSecretStoreKind {
+		if config.Auth.SecretRef.ConnectToken.Namespace == nil {
+			return fmt.Errorf(errClusterSecretStoreNamespaceMissing)
+		}
+	} else {
+		if config.Auth.SecretRef.ConnectToken.Namespace != nil {
+			return fmt.Errorf(errSecretStoreNamespaceSet)
+		}
+	}
+
+	return nil
+}
+
 // GetSecret returns a single secret from the provider.
-func (provider *ProviderOnePassword) GetSecret(ctx context.Context, ref esv1alpha1.ExternalSecretDataRemoteRef) ([]byte, error) {
+func (provider *ProviderOnePassword) GetSecret(ctx context.Context, ref esv1beta1.ExternalSecretDataRemoteRef) ([]byte, error) {
 	item, err := provider.findItem(ref.Key)
 	if err != nil {
 		return nil, err
@@ -137,8 +153,20 @@ func (provider *ProviderOnePassword) GetSecret(ctx context.Context, ref esv1alph
 	return []byte(value), nil
 }
 
+// Validate checks if the client is configured correctly
+// to be able to retrieve secrets from the provider
+func (provider *ProviderOnePassword) Validate() error {
+	for vaultName := range provider.vaults {
+		_, err := provider.client.GetItems(vaultName)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // GetSecretMap returns multiple k/v pairs from the provider, for dataFrom
-func (provider *ProviderOnePassword) GetSecretMap(ctx context.Context, ref esv1alpha1.ExternalSecretDataRemoteRef) (map[string][]byte, error) {
+func (provider *ProviderOnePassword) GetSecretMap(ctx context.Context, ref esv1beta1.ExternalSecretDataRemoteRef) (map[string][]byte, error) {
 	item, err := provider.findItem(ref.Key)
 	if err != nil {
 		return nil, err
@@ -167,6 +195,41 @@ func (provider *ProviderOnePassword) GetSecretMap(ctx context.Context, ref esv1a
 		// caution: do not use client.GetValue here because it has undesireable behavior on keys with a dot in them
 		secretData[field.Label] = []byte(field.Value)
 	}
+
+	return secretData, nil
+}
+
+// GetAllSecrets syncs multiple 1password Items into a single Kubernetes Secret.
+func (provider *ProviderOnePassword) GetAllSecrets(ctx context.Context, ref esv1beta1.ExternalSecretFind) (map[string][]byte, error) {
+	// TODO
+	// item, err := provider.findItem(ref.Key)
+	// if err != nil {
+	//     return nil, err
+	// }
+
+	secretData := make(map[string][]byte)
+
+	// // handle files
+	// if item.Category == "DOCUMENT" {
+	//     for _, file := range item.Files {
+	//         contents, err := provider.client.GetFileContent(file)
+	//         if err != nil {
+	//             return nil, err
+	//         }
+	//         secretData[file.Name] = contents
+	//     }
+
+	//     return secretData, nil
+	// }
+
+	// for _, field := range item.Fields {
+	//     if length := countFieldsWithLabel(field.Label, item.Fields); length != 1 {
+	//         return nil, fmt.Errorf(errExpectedOneField, fmt.Errorf("'%s' in '%s', got %d", field.Label, item.Title, length))
+	//     }
+
+	//     // caution: do not use client.GetValue here because it has undesireable behavior on keys with a dot in them
+	//     secretData[field.Label] = []byte(field.Value)
+	// }
 
 	return secretData, nil
 }
@@ -242,7 +305,7 @@ func sortVaults(vaults map[string]int) []string {
 }
 
 func init() {
-	schema.Register(&ProviderOnePassword{}, &esv1alpha1.SecretStoreProvider{
-		OnePassword: &esv1alpha1.OnePasswordProvider{},
+	esv1beta1.Register(&ProviderOnePassword{}, &esv1beta1.SecretStoreProvider{
+		OnePassword: &esv1beta1.OnePasswordProvider{},
 	})
 }

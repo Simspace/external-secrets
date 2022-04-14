@@ -20,7 +20,7 @@ import (
 	"testing"
 
 	"github.com/1Password/connect-sdk-go/onepassword"
-	esv1alpha1 "github.com/external-secrets/external-secrets/apis/externalsecrets/v1alpha1"
+	esv1beta1 "github.com/external-secrets/external-secrets/apis/externalsecrets/v1beta1"
 	fake "github.com/external-secrets/external-secrets/pkg/provider/onepassword/fake"
 )
 
@@ -310,7 +310,7 @@ func TestFindItem(t *testing.T) {
 func TestGetSecret(t *testing.T) {
 	type check struct {
 		checkNote     string
-		ref           esv1alpha1.ExternalSecretDataRemoteRef
+		ref           esv1beta1.ExternalSecretDataRemoteRef
 		expectedValue string
 		expectedErr   error
 	}
@@ -337,7 +337,7 @@ func TestGetSecret(t *testing.T) {
 			checks: []check{
 				{
 					checkNote: "key1",
-					ref: esv1alpha1.ExternalSecretDataRemoteRef{
+					ref: esv1beta1.ExternalSecretDataRemoteRef{
 						Key:      "my-item",
 						Property: "key1",
 					},
@@ -346,7 +346,7 @@ func TestGetSecret(t *testing.T) {
 				},
 				{
 					checkNote: "'password' (defaulted property)",
-					ref: esv1alpha1.ExternalSecretDataRemoteRef{
+					ref: esv1beta1.ExternalSecretDataRemoteRef{
 						Key: "my-item",
 					},
 					expectedValue: "value2",
@@ -377,7 +377,7 @@ func TestGetSecret(t *testing.T) {
 			checks: []check{
 				{
 					checkNote: "file named my-file.png",
-					ref: esv1alpha1.ExternalSecretDataRemoteRef{
+					ref: esv1beta1.ExternalSecretDataRemoteRef{
 						Key:      "my-item",
 						Property: "my-file.png",
 					},
@@ -386,7 +386,7 @@ func TestGetSecret(t *testing.T) {
 				},
 				{
 					checkNote: "empty ref.Property",
-					ref: esv1alpha1.ExternalSecretDataRemoteRef{
+					ref: esv1beta1.ExternalSecretDataRemoteRef{
 						Key: "my-item",
 					},
 					expectedValue: "my-contents",
@@ -394,7 +394,7 @@ func TestGetSecret(t *testing.T) {
 				},
 				{
 					checkNote: "file non existent",
-					ref: esv1alpha1.ExternalSecretDataRemoteRef{
+					ref: esv1beta1.ExternalSecretDataRemoteRef{
 						Key:      "my-item",
 						Property: "you-cant-find-me.png",
 					},
@@ -417,7 +417,7 @@ func TestGetSecret(t *testing.T) {
 			checks: []check{
 				{
 					checkNote: "key1",
-					ref: esv1alpha1.ExternalSecretDataRemoteRef{
+					ref: esv1beta1.ExternalSecretDataRemoteRef{
 						Key:      "my-item",
 						Property: "key1",
 					},
@@ -460,7 +460,7 @@ func TestGetSecret(t *testing.T) {
 func TestGetSecretMap(t *testing.T) {
 	type check struct {
 		checkNote   string
-		ref         esv1alpha1.ExternalSecretDataRemoteRef
+		ref         esv1beta1.ExternalSecretDataRemoteRef
 		expectedMap map[string][]byte
 		expectedErr error
 	}
@@ -487,7 +487,7 @@ func TestGetSecretMap(t *testing.T) {
 			checks: []check{
 				{
 					checkNote: "all Properties",
-					ref: esv1alpha1.ExternalSecretDataRemoteRef{
+					ref: esv1beta1.ExternalSecretDataRemoteRef{
 						Key: "my-item",
 					},
 					expectedMap: map[string][]byte{
@@ -526,7 +526,7 @@ func TestGetSecretMap(t *testing.T) {
 			checks: []check{
 				{
 					checkNote: "all Properties",
-					ref: esv1alpha1.ExternalSecretDataRemoteRef{
+					ref: esv1beta1.ExternalSecretDataRemoteRef{
 						Key: "my-item",
 					},
 					expectedMap: map[string][]byte{
@@ -552,7 +552,7 @@ func TestGetSecretMap(t *testing.T) {
 			checks: []check{
 				{
 					checkNote: "key1",
-					ref: esv1alpha1.ExternalSecretDataRemoteRef{
+					ref: esv1beta1.ExternalSecretDataRemoteRef{
 						Key: "my-item",
 					},
 					expectedMap: nil,
