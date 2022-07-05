@@ -13,7 +13,7 @@
     
     
       
-        <title>Fake - External Secrets Operator</title>
+        <title>Roadmap - External Secrets Operator</title>
       
     
     
@@ -67,6 +67,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#the-road-to-external-secrets-ga" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -112,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Fake
+              Roadmap
             
           </span>
         </div>
@@ -589,14 +594,12 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
       
       
       
@@ -1063,19 +1066,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../provider-fake/" class="md-nav__link">
         Fake
       </a>
-      
     </li>
   
 
@@ -1444,11 +1439,21 @@
 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../roadmap/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Roadmap
       </a>
+      
     </li>
   
 
@@ -1505,80 +1510,72 @@
               </div>
             
             
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
               
                 
-<a href="https://github.com/external-secrets/external-secrets/edit/master/docs/provider-fake.md" title="Edit this page" class="md-content__button md-icon">
+<a href="https://github.com/external-secrets/external-secrets/edit/master/docs/roadmap.md" title="Edit this page" class="md-content__button md-icon">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
 </a>
 
 
-  <h1>Fake</h1>
-
-<p>We provide a <code>fake</code> implementation to help with testing. This provider returns static key/value pairs and nothing else.
-To use the <code>fake</code> provider simply create a <code>SecretStore</code> or <code>ClusterSecretStore</code> and configure it like in the following example:</p>
-<div class="admonition note inline end">
-<p class="admonition-title">Note</p>
-<p>The provider returns static data configured in <code>value</code> or <code>valueMap</code>. You can define a <code>version</code>, too. If set the <code>remoteRef</code> from an ExternalSecret must match otherwise no value is returned.</p>
-</div>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">external-secrets.io/v1beta1</span><span class="w"></span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterSecretStore</span><span class="w"></span>
-<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fake</span><span class="w"></span>
-<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">provider</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">fake</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">data</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/foo/bar&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;HELLO1&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/foo/bar&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;HELLO2&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v2&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/foo/baz&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueMap</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">foo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example</span><span class="w"></span>
-<span class="w">          </span><span class="nt">other</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">thing</span><span class="w"></span>
-</code></pre></div>
-<p>Please note that <code>value</code> is intended for exclusive use with <code>data</code> and <code>valueMap</code> for <code>dataFrom</code>.
-Here is an example <code>ExternalSecret</code> that displays this behavior:</p>
-<div class="admonition warning inline end">
-<p class="admonition-title">Warning</p>
-<p>This provider supports specifying different <code>data[].version</code> configurations. However, <code>data[].property</code> is ignored.</p>
-</div>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">external-secrets.io/v1beta1</span><span class="w"></span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ExternalSecret</span><span class="w"></span>
-<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example</span><span class="w"></span>
-<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">refreshInterval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1h</span><span class="w"></span>
-<span class="w">  </span><span class="nt">secretStoreRef</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fake</span><span class="w"></span>
-<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterSecretStore</span><span class="w"></span>
-<span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">secret-to-be-created</span><span class="w"></span>
-<span class="w">  </span><span class="nt">data</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foo_bar</span><span class="w"></span>
-<span class="w">    </span><span class="nt">remoteRef</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/foo/bar</span><span class="w"></span>
-<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
-<span class="w">  </span><span class="nt">dataFrom</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">extract</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/foo/baz</span><span class="w"></span>
-</code></pre></div>
-<p>This results in the following secret:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span><span class="w"></span>
-<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">secret-to-be-created</span><span class="w"></span>
-<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
-<span class="nt">data</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">foo_bar</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SEVMTE8x</span><span class="w"> </span><span class="c1"># HELLO1  (via data)</span><span class="w"></span>
-<span class="w">  </span><span class="nt">foo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ZXhhbXBsZQ==</span><span class="w"> </span><span class="c1"># example (via dataFrom)</span><span class="w"></span>
-<span class="w">  </span><span class="nt">other</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dGhpbmc=</span><span class="w">   </span><span class="c1"># thing   (via dataFrom)</span><span class="w"></span>
-</code></pre></div>
+<h1 id="the-road-to-external-secrets-ga">The road to external-secrets GA</h1>
+<p>The following external-secret custom resource APIs are considered stable:</p>
+<ul>
+<li><code>ExternalSecret</code></li>
+<li><code>ClusterExternalSecret</code></li>
+<li><code>SecretStore</code></li>
+<li><code>ClusterSecretStore</code></li>
+</ul>
+<p>These CRDs are currently at <code>v1beta1</code> and are considered production ready. Going forward, breaking changes to these APIs will be accompanied by a conversion mechanism.</p>
+<p>We have identified the following areas of work. This is subject to change while we gather feedback. We have a <a href="https://github.com/orgs/external-secrets/projects/2/views/1">GitHub Project Board</a> where we organize issues and milestones on a high level.</p>
+<ul>
+<li>Conformance testing<ul>
+<li>end to end testing with ArgoCD and Flux</li>
+<li>end to end testing for all project maintained providers</li>
+</ul>
+</li>
+<li>API enhancements<ul>
+<li>consolidate provider fields</li>
+<li>dataFrom key rewrites</li>
+<li>provider versioning strategy</li>
+<li>pushing secrets to a provider</li>
+</ul>
+</li>
+<li>Documentation Improvements<ul>
+<li>Troubleshooting Guides</li>
+<li>FAQ</li>
+<li>review multi tenancy docs</li>
+<li>provide security model for infosec teams</li>
+<li>provider specific guides</li>
+</ul>
+</li>
+<li>Observability<ul>
+<li>Provide Grafana Dashboard and Prometheus alerts</li>
+<li>add provider-level metrics</li>
+</ul>
+</li>
+<li>Pentest &amp; SBOM</li>
+</ul>
 
               
             </article>
@@ -1592,7 +1589,7 @@ Here is an example <code>ExternalSecret</code> that displays this behavior:</p>
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../provider-webhook/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Webhook" rel="prev">
+        <a href="../contributing-coc/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Code of Conduct" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1601,20 +1598,20 @@ Here is an example <code>ExternalSecret</code> that displays this behavior:</p>
               <span class="md-footer__direction">
                 Previous
               </span>
-              Webhook
+              Code of Conduct
             </div>
           </div>
         </a>
       
       
         
-        <a href="../provider-kubernetes/" class="md-footer__link md-footer__link--next" aria-label="Next: Kubernetes" rel="next">
+        <a href="../faq/" class="md-footer__link md-footer__link--next" aria-label="Next: FAQ" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Kubernetes
+              FAQ
             </div>
           </div>
           <div class="md-footer__button md-icon">

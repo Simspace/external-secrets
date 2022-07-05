@@ -873,6 +873,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../provider-yandex-certificate-manager/" class="md-nav__link">
+        Certificate Manager
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../provider-yandex-lockbox/" class="md-nav__link">
         Lockbox
       </a>
@@ -1420,6 +1434,36 @@
           
         </ul>
       </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../roadmap/" class="md-nav__link">
+        Roadmap
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        FAQ
+      </a>
     </li>
   
 
@@ -3027,14 +3071,16 @@ string
 </tr>
 <tr>
 <td>
-<code>version</code></br>
+<code>metadataPolicy</code></br>
 <em>
-string
+<a href="#external-secrets.io/v1beta1.ExternalSecretMetadataPolicy">
+ExternalSecretMetadataPolicy
+</a>
 </em>
 </td>
 <td>
 <em>(Optional)</em>
-<p>Used to select a specific version of the Provider value, if supported</p>
+<p>Policy for fetching tags/labels from provider secrets, possible options are Fetch, None. Defaults to None</p>
 </td>
 </tr>
 <tr>
@@ -3047,6 +3093,18 @@ string
 <td>
 <em>(Optional)</em>
 <p>Used to select a specific property of the Provider value (if a map), if supported</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>version</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Used to select a specific version of the Provider value, if supported</p>
 </td>
 </tr>
 <tr>
@@ -3169,6 +3227,27 @@ ExternalSecretConversionStrategy
 </td>
 </tr>
 </tbody>
+</table>
+<h3 id="external-secrets.io/v1beta1.ExternalSecretMetadataPolicy">ExternalSecretMetadataPolicy
+(<code>string</code> alias)</p></h3>
+<p>
+(<em>Appears on:</em>
+<a href="#external-secrets.io/v1beta1.ExternalSecretDataRemoteRef">ExternalSecretDataRemoteRef</a>)
+</p>
+<p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr><td><p>&#34;Fetch&#34;</p></td>
+<td></td>
+</tr><tr><td><p>&#34;None&#34;</p></td>
+<td></td>
+</tr></tbody>
 </table>
 <h3 id="external-secrets.io/v1beta1.ExternalSecretSpec">ExternalSecretSpec
 </h3>
@@ -4179,9 +4258,7 @@ TokenAuth
 <td>
 <code>serviceAccount</code></br>
 <em>
-<a href="#external-secrets.io/v1beta1.ServiceAccountAuth">
-ServiceAccountAuth
-</a>
+github.com/external-secrets/external-secrets/apis/meta/v1.ServiceAccountSelector
 </em>
 </td>
 <td>
@@ -4825,6 +4902,20 @@ IBMProvider
 </tr>
 <tr>
 <td>
+<code>yandexcertificatemanager</code></br>
+<em>
+<a href="#external-secrets.io/v1beta1.YandexCertificateManagerProvider">
+YandexCertificateManagerProvider
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>YandexCertificateManager configures this store to sync secrets using Yandex Certificate Manager provider</p>
+</td>
+</tr>
+<tr>
+<td>
 <code>yandexlockbox</code></br>
 <em>
 <a href="#external-secrets.io/v1beta1.YandexLockboxProvider">
@@ -5337,34 +5428,6 @@ bool
 </tr>
 </tbody>
 </table>
-<h3 id="external-secrets.io/v1beta1.ServiceAccountAuth">ServiceAccountAuth
-</h3>
-<p>
-(<em>Appears on:</em>
-<a href="#external-secrets.io/v1beta1.KubernetesAuth">KubernetesAuth</a>)
-</p>
-<p>
-</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<code>serviceAccount</code></br>
-<em>
-github.com/external-secrets/external-secrets/apis/meta/v1.ServiceAccountSelector
-</em>
-</td>
-<td>
-</td>
-</tr>
-</tbody>
-</table>
 <h3 id="external-secrets.io/v1beta1.TemplateEngineVersion">TemplateEngineVersion
 (<code>string</code> alias)</p></h3>
 <p>
@@ -5536,11 +5599,16 @@ github.com/external-secrets/external-secrets/apis/meta/v1.SecretKeySelector
 </tr>
 </thead>
 <tbody><tr><td><p>2</p></td>
-<td></td>
+<td><p>Error indicates that there is a misconfiguration.</p>
+</td>
 </tr><tr><td><p>0</p></td>
-<td></td>
+<td><p>Ready indicates that the client is confgured correctly
+and can be used.</p>
+</td>
 </tr><tr><td><p>1</p></td>
-<td></td>
+<td><p>Unknown indicates that the client can be used
+but information is missing and it can not be validated.</p>
+</td>
 </tr></tbody>
 </table>
 <h3 id="external-secrets.io/v1beta1.VaultAppRole">VaultAppRole
@@ -6475,6 +6543,122 @@ github.com/external-secrets/external-secrets/apis/meta/v1.SecretKeySelector
 </td>
 <td>
 <p>Secret ref to fill in credentials</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="external-secrets.io/v1beta1.YandexCertificateManagerAuth">YandexCertificateManagerAuth
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#external-secrets.io/v1beta1.YandexCertificateManagerProvider">YandexCertificateManagerProvider</a>)
+</p>
+<p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>authorizedKeySecretRef</code></br>
+<em>
+github.com/external-secrets/external-secrets/apis/meta/v1.SecretKeySelector
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>The authorized key used for authentication</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="external-secrets.io/v1beta1.YandexCertificateManagerCAProvider">YandexCertificateManagerCAProvider
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#external-secrets.io/v1beta1.YandexCertificateManagerProvider">YandexCertificateManagerProvider</a>)
+</p>
+<p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>certSecretRef</code></br>
+<em>
+github.com/external-secrets/external-secrets/apis/meta/v1.SecretKeySelector
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="external-secrets.io/v1beta1.YandexCertificateManagerProvider">YandexCertificateManagerProvider
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#external-secrets.io/v1beta1.SecretStoreProvider">SecretStoreProvider</a>)
+</p>
+<p>
+<p>YandexCertificateManagerProvider Configures a store to sync secrets using the Yandex Certificate Manager provider.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>apiEndpoint</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Yandex.Cloud API endpoint (e.g. &lsquo;api.cloud.yandex.net:443&rsquo;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>auth</code></br>
+<em>
+<a href="#external-secrets.io/v1beta1.YandexCertificateManagerAuth">
+YandexCertificateManagerAuth
+</a>
+</em>
+</td>
+<td>
+<p>Auth defines the information necessary to authenticate against Yandex Certificate Manager</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>caProvider</code></br>
+<em>
+<a href="#external-secrets.io/v1beta1.YandexCertificateManagerCAProvider">
+YandexCertificateManagerCAProvider
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>The provider for the CA bundle to use to validate Yandex.Cloud server certificate.</p>
 </td>
 </tr>
 </tbody>
